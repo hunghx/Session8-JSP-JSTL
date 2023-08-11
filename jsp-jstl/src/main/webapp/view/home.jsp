@@ -13,9 +13,9 @@
 </head>
 <body>
 <h1>Đây là trang HOME</h1>
-<p>${name}</p>
-<c:forEach items="${obj}" var="number" varStatus="loop">
-    <li>${number}</li>
-</c:forEach>
+<p>${user.fullName}</p>
+<%--<c:forEach items="${obj}" var="number" varStatus="loop">--%>
+<%--    <li>${number}</li>--%>
+<%--</c:forEach>--%>
 </body>
 </html>

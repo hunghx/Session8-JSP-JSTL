@@ -9,6 +9,16 @@ import java.util.List;
 
 @WebServlet(name = "HomeServlet", value = "/HomeServlet")
 public class HomeServlet extends HttpServlet {
+    protected List<User> list ;
+
+    @Override
+    public void init() throws ServletException {
+        list= new ArrayList<>();
+        list.add(new User("hung@gmail.com","Hồ Xuân Hùng","123456"));
+        list.add(new User("minh@gmail.com","Nguyễn Đức Minh","123456"));
+        list.add(new User("nam@gmail.com","Nguyễn Phương Nam","123456"));
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -33,6 +43,33 @@ public class HomeServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        request.setCharacterEncoding("UTF-8");
+        String action = request.getParameter("action");
+        if (action!=null){
+            switch (action){
+                case "LOGIN":
+                    String email = request.getParameter("email");
+                    String password = request.getParameter("password");
+                    User u = checkLogin(email,password);
+                    if(u!=null){
+                        request.setAttribute("user",u);
+                        request.getRequestDispatcher("/view/home.jsp").forward(request,response);
+                    }else {
+                        request.setAttribute("email",email);
+                        request.setAttribute("password",password);
+                        request.setAttribute("error","Tài khaonr hoặc mật khẩu không đùng");
+                        request.getRequestDispatcher("/view/login.jsp").forward(request,response);
+                    }
+            }
+        }
+    }
+    protected User checkLogin(String email, String password){
+        for (User u: list
+             ) {
+            if(u.getEmail().equalsIgnoreCase(email)&&u.getPassword().equalsIgnoreCase(password)){
+                return u;
+            }
+        }
+        return null;
     }
 }
